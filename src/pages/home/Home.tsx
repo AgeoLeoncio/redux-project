@@ -39,8 +39,17 @@ export const Home:React.FC<HomeInterface> = () => {
                 disableColumnSelector
                 disableRowSelectionOnClick
                 autoHeight
-                pagination
-                getRowId={(row:any )=> row.id}>
+                getRowId={(row:any )=> row.id}
+                initialState={{
+                    pagination:{
+                        paginationModel:{
+                            pageSize:5,
+                            page:0,
+                        },
+                    },
+                }}
+                pageSizeOptions={[5,10,15,20]}
+                >
                 
         </DataGrid>
     )

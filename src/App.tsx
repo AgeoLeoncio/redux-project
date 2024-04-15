@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux"
 import { addUser } from "./redux/userSlice" */
 import { Navbar } from "./components/navbar/Navbar"
 import { Home } from "./pages/home/Home"
+import { LayoutContainer } from "./styled-components/Layout-sc"
+import './App.css'
 
 export const App = () => {
 
@@ -22,7 +24,9 @@ export const App = () => {
   return (
     <>
       <Navbar></Navbar>
+    <LayoutContainer>
       <Home></Home>
+    </LayoutContainer>
       {/* <Header></Header>
       <Email></Email> */}
     </>
