@@ -24,9 +24,9 @@ export const App = () => {
   return (
     <>
       <Navbar></Navbar>
-    <LayoutContainer>
-      <Home></Home>
-    </LayoutContainer>
+      <LayoutContainer>
+        <Home></Home>
+      </LayoutContainer>
       {/* <Header></Header>
       <Email></Email> */}
     </>
