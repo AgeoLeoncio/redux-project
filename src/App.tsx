@@ -3,10 +3,10 @@ import { Email } from "./components/Email"
 import { Header } from "./components/Header"
 import { useDispatch } from "react-redux"
 import { addUser } from "./redux/userSlice" */
-import { Navbar } from "./components/navbar/Navbar"
-import { Home } from "./pages/home/Home"
-import { LayoutContainer } from "./styled-components/Layout-sc"
 import './App.css'
+import { Navbar } from "./components/navbar/Navbar"
+import { Home } from "./pages/home/components/Home"
+import { LayoutContainer } from "./styled-components/Layout-sc"
 
 export const App = () => {
 

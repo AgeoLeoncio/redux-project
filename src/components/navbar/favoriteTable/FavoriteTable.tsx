@@ -1,47 +1,43 @@
+import { Delete } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { People } from "../../data/people";
-import { Person } from "../../models/Person";
-import { useEffect, useState } from "react";
-import { Checkbox } from "@mui/material";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavorite } from "../../redux/states/favorites";
-import { addPeople } from "../../redux/states/people";
-import { AppStore, store } from "../../redux/store";
-export interface HomeInterface{
+import { Person } from "../../../models/Person";
+import { removeFavorite } from "../../../redux/states/favorites";
+import { AppStore } from "../../../redux/store";
+
+interface FavoriteTableInterface{
 
 }
 
-/**Instalamos el datagrid para hacer uso en este componente de npm install @mui/x-data-grid */
-export const Home: React.FC<HomeInterface> = () => {
+export const FavoriteTable:React.FC<FavoriteTableInterface> = () => {
 
-    const [selectedPeople, setSelectedPeople] = useState<Person[]>([]);
-
-    const findPerson = (person: Person) => !!selectedPeople.find(p => p.id === person.id);
-    const filterPerson = (person: Person) => selectedPeople.filter(p => p.id !== person.id);
     const dispatch = useDispatch();
-    const people = useSelector((state:AppStore) =>state.people);
+    const favoriteState = useSelector((store: AppStore) => store.favorites);
 
     //columnas que va utilizar el datagrid
-    const handleChange = (person: Person) => {
-        const filteredPeopple = findPerson(person) ? filterPerson(person) : [...selectedPeople, person];
-        dispatch(addFavorite(filteredPeopple));
-        setSelectedPeople(filteredPeopple);
+    const handleClick = (person: Person) => {
+
+        dispatch(removeFavorite(person));
+        console.log("Eliminando la persona", person.id)
     };
 
 
     /**En la columna del checkbox, indicamos que encontramos una persona que  */
-    const columns:GridColDef[] = [
+    const columns: GridColDef[] = [
         {
             field: 'actions',
             type: 'actions',
             headerName: '',
             sortable: false,
             width: 50,
-            renderCell: (params: GridRenderCellParams) => <>{<Checkbox
-                size="small"
-                checked={findPerson(params.row)}
-                onChange={() => handleChange(params.row)}>
-            </Checkbox>}</>
+            renderCell: (params: GridRenderCellParams) => <>{<IconButton
+                color="warning" aria-label="favorites"
+                component='label'
+                onClick={() => handleClick(params.row)}>
+                <Delete></Delete>
+            </IconButton>}</>
         },
         {
             field: 'name',
@@ -63,13 +59,11 @@ export const Home: React.FC<HomeInterface> = () => {
             renderCell: (params: GridRenderCellParams) => <>{params.value}</> //+ params.row.name
         }
     ];
-    useEffect(()=>{
-        dispatch(addPeople(People));
-    },[])
+    console.log(favoriteState)
 
     return (
         <DataGrid
-            rows={people}
+            rows={favoriteState}
             columns={columns}
             disableColumnSelector
             disableRowSelectionOnClick
@@ -88,4 +82,4 @@ export const Home: React.FC<HomeInterface> = () => {
 
         </DataGrid>
     );
-};
+}
