@@ -1,8 +1,12 @@
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { People } from "../../data/people";
 import { Person } from "../../models/Person";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite } from "../../redux/states/favorites";
+import { addPeople } from "../../redux/states/people";
+import { AppStore, store } from "../../redux/store";
 export interface HomeInterface{
 
 }
@@ -14,11 +18,16 @@ export const Home: React.FC<HomeInterface> = () => {
 
     const findPerson = (person: Person) => !!selectedPeople.find(p => p.id === person.id);
     const filterPerson = (person: Person) => selectedPeople.filter(p => p.id !== person.id);
+    const dispatch = useDispatch();
+    const people = useSelector((state:AppStore) =>state.people);
 
     //columnas que va utilizar el datagrid
     const handleChange = (person: Person) => {
-        setSelectedPeople(findPerson(person) ? filterPerson(person) : [...selectedPeople, person]);
+        const filteredPeopple = findPerson(person) ? filterPerson(person) : [...selectedPeople, person];
+        dispatch(addFavorite(filteredPeopple));
+        setSelectedPeople(filteredPeopple);
     };
+
 
     /**En la columna del checkbox, indicamos que encontramos una persona que  */
     const columns:GridColDef[] = [
@@ -54,10 +63,13 @@ export const Home: React.FC<HomeInterface> = () => {
             renderCell: (params: GridRenderCellParams) => <>{params.value}</> //+ params.row.name
         }
     ];
+    useEffect(()=>{
+        dispatch(addPeople(People));
+    },[])
 
     return (
         <DataGrid
-            rows={People}
+            rows={people}
             columns={columns}
             disableColumnSelector
             disableRowSelectionOnClick
